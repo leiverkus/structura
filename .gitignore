@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# Tooling
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Env / secrets
+.env
+
+# Data (large rasters / WebODM products are not versioned here)
+data/
+*.tif
+*.tiff
+*.laz
+*.las
+*.ply
+
+# OS
+.DS_Store
