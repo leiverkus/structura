@@ -12,6 +12,8 @@ from .db.api import DjangoApiSink
 from .db.base import VectorSink
 from .db.file import FileSink
 from .db.postgis import PostGISSink
+from .dem.edge_tracing import EdgeTracer
+from .dem.wall_tracing import WallTracer
 from .intake import RasterKind, discover_inputs
 from .models import Feature
 from .segmentation.base import Segmenter
@@ -47,7 +49,7 @@ def run(settings: Settings, *, write: bool = True) -> list[Feature]:
     """Run the vectorisation pipeline over all discovered inputs.
 
     Orthophotos are segmented with the configured 2D backend (``make_segmenter``);
-    the DEM (2.5D) track is still a stub (ROADMAP v0.4). Returns the produced
+    DEMs are traced into wall + edge polylines (2.5D track). Returns the produced
     features, and writes them to the configured sink unless ``write`` is False.
     """
     products = discover_inputs(settings.input_dir)
@@ -58,8 +60,8 @@ def run(settings: Settings, *, write: bool = True) -> list[Feature]:
         if product.kind is RasterKind.ORTHO:
             features += segmenter.segment(product.path)
         elif product.kind is RasterKind.DEM:
-            # TODO: features += WallTracer().trace(product.path)  # ROADMAP v0.4
-            pass
+            features += WallTracer(gap_bridge_m=settings.gap_bridge_m).trace(product.path)
+            features += EdgeTracer().trace(product.path)
 
     if write and features:
         make_sink(settings).write(features)

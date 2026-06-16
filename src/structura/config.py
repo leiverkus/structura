@@ -26,6 +26,8 @@ class Settings:
     # 2D segmentation backend: "classical" | "sam" | "cellpose"
     segmentation_backend: str
     gpu: bool
+    # 2.5D track: gap-bridging tolerance (world units) for wall tracing
+    gap_bridge_m: float
     # File sink (default)
     output_path: Path
     # PostGIS
@@ -50,6 +52,7 @@ class Settings:
             sink=os.environ.get("STRUCTURA_SINK", "file"),
             segmentation_backend=os.environ.get("STRUCTURA_2D_BACKEND", "classical"),
             gpu=os.environ.get("STRUCTURA_GPU", "").lower() in ("1", "true", "yes"),
+            gap_bridge_m=float(os.environ.get("STRUCTURA_GAP_BRIDGE_M", "0.3")),
             output_path=Path(
                 os.environ.get("STRUCTURA_OUTPUT_PATH", "./data/output/features.gpkg")
             ),
