@@ -119,7 +119,8 @@ sinks are stubs (they raise `NotImplementedError`). The comparative model
 evaluation that decides the default backends is **blocked on excavation data**
 that does not exist yet — see the research repository for the evaluation plan.
 
-Open architectural decisions are tracked in
+The planned milestones are in [`ROADMAP.md`](ROADMAP.md); open architectural
+decisions are tracked in
 [`docs/architecture.md`](docs/architecture.md#open-decisions).
 
 ## Documentation
