@@ -33,13 +33,14 @@ no GPU, no model download, no database required.
 - [x] `structura run` produces real polygons from a sample orthophoto.
 - [x] Tests on a tiny synthetic GeoTIFF; CI green end-to-end (geo extra installed).
 
-### v0.3.0 — 2D track complete *(Sub-study A)*
-- [ ] `SamSegmenter` implemented (automatic / prompted mask generation).
-- [ ] `CellposeSegmenter` implemented (tiled instance segmentation + stitch).
-- [ ] Backend selection via configuration.
-- [ ] Geometry metric utilities (over-/under-segmentation rate, a/b-axis error).
+### v0.3.0 — 2D track complete ✅ *(released 2026-06-16)*  *(Sub-study A)*
+- [x] `SamSegmenter` implemented (SAM automatic mask generation via samgeo).
+- [x] `CellposeSegmenter` implemented (Cellpose-SAM v4 instance segmentation).
+- [x] Backend selection via configuration (`STRUCTURA_2D_BACKEND`, `make_segmenter`).
+- [x] Geometry metric utilities (over-/under-segmentation rate, a/b-axis error;
+      plus IoU/matching, precision/recall/F1) in `structura.metrics`.
 - Data-dependent: model fine-tuning and the SAM-vs-Cellpose verdict belong to
-  the evaluation milestone, not here.
+  the evaluation milestone (v0.9), not here.
 
 ### v0.4.0 — 2.5D track *(Sub-study B)*
 - [ ] `dem.relief` derivatives (hillshade, slope, curvature, local relief model;

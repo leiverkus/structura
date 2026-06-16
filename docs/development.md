@@ -58,12 +58,15 @@ top level, so `import structura` works with only the core dependency installed.
 2. Implement a class with a `name: str` attribute and a
    `segment(self, ortho_path: Path) -> list[Feature]` method — that satisfies
    the `Segmenter` protocol in `segmentation/base.py` (no inheritance needed).
-3. Return georeferenced `Feature`s: vectorise your masks via
-   `geo.mask_to_polygons(mask, transform, crs)` so geometry lands in the raster
-   CRS, and set `feature_type` / `track` / `properties`.
-4. Wire it into backend selection in `pipeline.py` (and, if user-selectable, a
-   config switch in `config.py`).
-5. Add a test.
+3. Return georeferenced `Feature`s: produce an integer instance-label mask and
+   hand it to `segmentation._common.label_mask_to_features(mask, transform, crs,
+   segmenter=self.name, source_raster=ortho_path)` — the shared step the
+   classical/SAM/Cellpose backends use, so CRS handling and the `properties`
+   shape stay consistent.
+4. Wire it into `make_segmenter` in `pipeline.py` and the `STRUCTURA_2D_BACKEND`
+   switch in `config.py`. Keep heavy model imports **inside** `segment()`.
+5. Add a test — CI-testable post-processing via a fake mask through
+   `label_mask_to_features`; guard real-model tests with `pytest.importorskip`.
 
 The same shape applies to a new **sink** (implement `VectorSink.write`) or a new
 **DEM tracer**.

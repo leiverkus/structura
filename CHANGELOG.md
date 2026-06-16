@@ -7,9 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-16
+
+Completes the 2D track (Sub-study A): two learned segmentation backends, a
+config-selectable backend, and geometry-metric utilities.
+
 ### Added
+- **SAM backend** via samgeo (`segment-geospatial`): automatic mask generation
+  on the (tiled) georeferenced ortho → label raster → shared vectorisation path.
+- **Cellpose backend** targeting **Cellpose-SAM (v4)** (`CellposeModel.eval`).
+- `segmentation._common.label_mask_to_features` — shared label-mask → `Feature`
+  wrapper used by the classical, SAM, and Cellpose backends.
+- `pipeline.make_segmenter` factory + `STRUCTURA_2D_BACKEND` / `STRUCTURA_GPU`
+  settings for config-selectable backends.
+- `structura.metrics` — geometry metrics for Sub-study A: `iou`,
+  `match_instances`, `precision_recall_f1`, `segmentation_rates`
+  (coverage-based over-/under-segmentation), `axis_error` (a/b-axis).
+- Tests: `test_metrics`, `test_make_segmenter`, `test_common`; heavy backend
+  tests (`test_sam`, `test_cellpose`) guarded with `pytest.importorskip`.
 - Zenodo archival: DOI badge in the README and the concept DOI
   (`10.5281/zenodo.20716606`) + v0.2.0 version DOI recorded in `CITATION.cff`.
+
+### Changed
+- `sam` extra → `segment-geospatial` (was segment-anything/torch/opencv);
+  `cellpose` extra → `cellpose>=4` (was `>=3`).
+- `ClassicalSegmenter` refactored to delegate its wrapping step to `_common`.
+- mypy skip-follows `samgeo` / `cellpose` / `torch` / `cv2`; version → `0.3.0`.
 
 ## [0.2.0] - 2026-06-16
 
@@ -62,6 +85,7 @@ output end-to-end with no GPU, model download, or database.
   - Optional dependency extras: `geo`, `sam`, `cellpose`, `db`, `api`, `dev`.
   - Smoke test (`tests/test_smoke.py`).
 
-[Unreleased]: https://github.com/leiverkus/structura/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/leiverkus/structura/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/leiverkus/structura/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/leiverkus/structura/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/leiverkus/structura/releases/tag/v0.1.0

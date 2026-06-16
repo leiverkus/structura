@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "structura-workflow"
-version = "0.2.0"
+version = "0.3.0"
 description = "AI-assisted vectorisation of photogrammetric excavation data into georeferenced vectors for a PostGIS excavation database."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -26,8 +26,8 @@ geo = [
     "pyogrio>=0.7",
 ]
 # 2D segmentation backends
-sam = ["segment-anything", "torch", "opencv-python"]
-cellpose = ["cellpose>=3.0"]
+sam = ["segment-geospatial"]   # samgeo — wraps SAM + checkpoint download + tiling
+cellpose = ["cellpose>=4"]     # Cellpose v4 (Cellpose-SAM / cpsam)
 # Database sinks
 db = ["psycopg[binary]>=3.1", "SQLAlchemy>=2.0", "GeoAlchemy2>=0.14"]
 # Django-API sink
@@ -59,6 +59,10 @@ module = [
     "skimage.*",
     "pyogrio.*",
     "tifffile.*",
+    "samgeo.*",
+    "cellpose.*",
+    "torch.*",
+    "cv2.*",
 ]
 follow_imports = "skip"
 ignore_missing_imports = true
