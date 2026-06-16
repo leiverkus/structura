@@ -14,7 +14,21 @@ from .db.file import FileSink
 from .db.postgis import PostGISSink
 from .intake import RasterKind, discover_inputs
 from .models import Feature
+from .segmentation.base import Segmenter
+from .segmentation.cellpose import CellposeSegmenter
 from .segmentation.classical import ClassicalSegmenter
+from .segmentation.sam import SamSegmenter
+
+
+def make_segmenter(settings: Settings) -> Segmenter:
+    backend = settings.segmentation_backend
+    if backend == "classical":
+        return ClassicalSegmenter()
+    if backend == "sam":
+        return SamSegmenter()
+    if backend == "cellpose":
+        return CellposeSegmenter(gpu=settings.gpu)
+    raise ValueError(f"Unknown 2D backend: {backend!r}")
 
 
 def make_sink(settings: Settings) -> VectorSink:
@@ -32,16 +46,17 @@ def make_sink(settings: Settings) -> VectorSink:
 def run(settings: Settings, *, write: bool = True) -> list[Feature]:
     """Run the vectorisation pipeline over all discovered inputs.
 
-    Orthophotos are segmented with the classical 2D backend; the DEM (2.5D) track
-    is still a stub (ROADMAP v0.4). Returns the produced features, and writes them
-    to the configured sink unless ``write`` is False.
+    Orthophotos are segmented with the configured 2D backend (``make_segmenter``);
+    the DEM (2.5D) track is still a stub (ROADMAP v0.4). Returns the produced
+    features, and writes them to the configured sink unless ``write`` is False.
     """
     products = discover_inputs(settings.input_dir)
     features: list[Feature] = []
+    segmenter = make_segmenter(settings)
 
     for product in products:
         if product.kind is RasterKind.ORTHO:
-            features += ClassicalSegmenter().segment(product.path)
+            features += segmenter.segment(product.path)
         elif product.kind is RasterKind.DEM:
             # TODO: features += WallTracer().trace(product.path)  # ROADMAP v0.4
             pass

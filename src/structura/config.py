@@ -23,6 +23,9 @@ def _load_dotenv(path: Path) -> None:
 class Settings:
     input_dir: Path
     sink: str  # "file" | "postgis" | "api"
+    # 2D segmentation backend: "classical" | "sam" | "cellpose"
+    segmentation_backend: str
+    gpu: bool
     # File sink (default)
     output_path: Path
     # PostGIS
@@ -45,6 +48,8 @@ class Settings:
         return cls(
             input_dir=Path(os.environ.get("STRUCTURA_INPUT_DIR", "./data/incoming")),
             sink=os.environ.get("STRUCTURA_SINK", "file"),
+            segmentation_backend=os.environ.get("STRUCTURA_2D_BACKEND", "classical"),
+            gpu=os.environ.get("STRUCTURA_GPU", "").lower() in ("1", "true", "yes"),
             output_path=Path(
                 os.environ.get("STRUCTURA_OUTPUT_PATH", "./data/output/features.gpkg")
             ),
