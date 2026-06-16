@@ -1,10 +1,12 @@
-"""Output sinks: write georeferenced features to the excavation database.
+"""Output sinks: write georeferenced features to disk or the excavation database.
 
-Two strategies (architectural decision still open):
+Strategies (the DB choice is still open — see ROADMAP v0.5):
+- :class:`~structura.db.file.FileSink` — write a GeoPackage / GeoJSON (default).
 - :class:`~structura.db.postgis.PostGISSink` — write directly to PostGIS.
 - :class:`~structura.db.api.DjangoApiSink` — POST to the Django app's API.
 """
 
 from .base import VectorSink
+from .file import FileSink
 
-__all__ = ["VectorSink"]
+__all__ = ["FileSink", "VectorSink"]

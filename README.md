@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg)](pyproject.toml)
-[![Status: scaffolding](https://img.shields.io/badge/status-scaffolding-orange.svg)](#status)
+[![Status: walking skeleton](https://img.shields.io/badge/status-walking--skeleton-orange.svg)](#status)
 
 **AI-assisted vectorisation of photogrammetric excavation data.**
 
@@ -93,10 +93,11 @@ pip install -e ".[dev]"      # pytest, ruff, mypy
 
 ## Usage
 
-Copy the environment template and fill it in:
+Running the pipeline needs the `geo` extra (`pip install -e ".[geo]"`). Copy the
+environment template and fill it in:
 
 ```bash
-cp .env.example .env         # set input dir, sink (postgis|api), DB / API creds
+cp .env.example .env         # set input dir, sink (file|postgis|api), output path
 ```
 
 The package exposes a `structura` CLI:
@@ -108,14 +109,19 @@ structura run --dry-run      # run the pipeline without writing to the sink
 structura run                # run and persist features to the configured sink
 ```
 
-Configuration is read from the environment / `.env` (see
+Out of the box the default sink is **`file`**: `structura run` segments each
+orthophoto with the classical 2D backend (no GPU, no model, no database) and
+writes georeferenced polygons to `./data/output/features.gpkg`, ready to open in
+QGIS. Configuration is read from the environment / `.env` (see
 [`.env.example`](.env.example) and [`docs/data-layout.md`](docs/data-layout.md)).
 
 ## Status
 
-**Scaffolding stage.** The package, CLI, configuration, data model, and the
-track / sink interfaces are in place; the per-track segmenters, tracers, and
-sinks are stubs (they raise `NotImplementedError`). The comparative model
+**Walking skeleton (v0.2).** The pipeline runs end-to-end: orthophoto intake →
+classical 2D segmentation → georeferenced polygons → GeoPackage/GeoJSON file
+output, with no GPU, model download, or database. The remaining backends (SAM,
+Cellpose), the 2.5D / profile / temporal tracks, and the PostGIS / Django-API
+sinks are still stubs (they raise `NotImplementedError`). The comparative model
 evaluation that decides the default backends is **blocked on excavation data**
 that does not exist yet — see the research repository for the evaluation plan.
 

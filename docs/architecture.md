@@ -24,7 +24,7 @@ intake  ──►  tracks  ──►  Feature[]  ──►  sink
 | `structura.dem` | 2.5D track — relief derivatives + wall / edge tracing. |
 | `structura.profile` | Profile track — section stratum segmentation. |
 | `structura.temporal` | Temporal track — overlay / intersect of daily layers. |
-| `structura.db` | Output sinks — direct PostGIS or Django API. |
+| `structura.db` | Output sinks — file (GeoPackage/GeoJSON), PostGIS, or Django API. |
 | `structura.pipeline` | Orchestration: intake → tracks → sink. |
 
 ## The data model
@@ -52,9 +52,12 @@ are what make every derived vector world-referenced: pixel `(col, row)` → worl
 Segments the orthophoto into polygon features. Three interchangeable backends
 implement the `Segmenter` protocol (`segment(ortho_path) -> list[Feature]`):
 
-- `SamSegmenter` — Segment Anything (baseline).
-- `CellposeSegmenter` — Cellpose instance masks (dense, roundish stones).
-- `ClassicalSegmenter` — watershed / contour baseline (cheap, deterministic).
+- `ClassicalSegmenter` — watershed baseline (**implemented**; cheap,
+  deterministic, GPU-free). Otsu thresholding drives the markers, watershed runs
+  on the Sobel gradient, connected foreground components become labels, and
+  `geo.mask_to_polygons` vectorises them. The default backend.
+- `SamSegmenter` — Segment Anything (stub, ROADMAP v0.3).
+- `CellposeSegmenter` — Cellpose instance masks (stub, ROADMAP v0.3).
 
 Masks become georeferenced polygons via `geo.mask_to_polygons`.
 
@@ -76,13 +79,16 @@ overlaid and intersected so features stay consistent across the series. Heavy
 set operations are best delegated to PostGIS once vectors are stored.
 
 ## Sinks (`structura.db`)
-Both implement the `VectorSink` protocol (`write(features) -> int`):
+All implement the `VectorSink` protocol (`write(features) -> int`):
 
+- `FileSink` — write a GeoPackage or GeoJSON (format from the file extension;
+  **implemented**, the testable default — inspect output in QGIS before the
+  PostGIS-vs-API decision). Asserts a single CRS; never reprojects.
 - `PostGISSink` — insert straight into a PostGIS table (geometry column with the
-  feature CRS SRID; attributes incl. `properties` as JSONB).
-- `DjangoApiSink` — POST features as GeoJSON to the Django app's API.
+  feature CRS SRID; attributes incl. `properties` as JSONB). Stub (ROADMAP v0.5).
+- `DjangoApiSink` — POST features as GeoJSON to the Django app's API. Stub (v0.5).
 
-The active sink is chosen by `STRUCTURA_SINK` (`postgis` | `api`).
+The active sink is chosen by `STRUCTURA_SINK` (`file` | `postgis` | `api`).
 
 ## Open decisions
 

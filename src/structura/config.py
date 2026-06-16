@@ -22,7 +22,9 @@ def _load_dotenv(path: Path) -> None:
 @dataclass(slots=True)
 class Settings:
     input_dir: Path
-    sink: str  # "postgis" | "api"
+    sink: str  # "file" | "postgis" | "api"
+    # File sink (default)
+    output_path: Path
     # PostGIS
     pg_dsn: str | None
     pg_schema: str
@@ -42,7 +44,10 @@ class Settings:
         dsn = f"host={host} port={port} dbname={db} user={user} password={pw}"
         return cls(
             input_dir=Path(os.environ.get("STRUCTURA_INPUT_DIR", "./data/incoming")),
-            sink=os.environ.get("STRUCTURA_SINK", "postgis"),
+            sink=os.environ.get("STRUCTURA_SINK", "file"),
+            output_path=Path(
+                os.environ.get("STRUCTURA_OUTPUT_PATH", "./data/output/features.gpkg")
+            ),
             pg_dsn=dsn,
             pg_schema=os.environ.get("STRUCTURA_PG_SCHEMA", "public"),
             pg_table=os.environ.get("STRUCTURA_PG_TABLE", "features"),

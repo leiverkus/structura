@@ -21,17 +21,17 @@ research plan, so the two repositories stay aligned.
 Package, CLI, configuration, data model, track/sink interfaces (stubs),
 packaging, docs, MIT license, citation metadata, CI.
 
-### v0.2.0 — Walking skeleton *(end-to-end on sample data)*
+### v0.2.0 — Walking skeleton ✅ *(released 2026-06-16)*
 The first milestone where the pipeline actually produces georeferenced output —
 no GPU, no model download, no database required.
-- [ ] `geo.read_raster` hardened; `geo.mask_to_polygons` implemented
-      (rasterio `features.shapes` → Shapely, applying the affine transform).
-- [ ] `ClassicalSegmenter` implemented (watershed / contour) — deterministic,
+- [x] `geo.mask_to_polygons` implemented (rasterio `features.shapes` → Shapely,
+      applying the affine transform; world-unit `min_area` filter).
+- [x] `ClassicalSegmenter` implemented (Otsu-marker watershed) — deterministic,
       CI-testable, the reference backend.
-- [ ] **New `FileSink`** (GeoPackage / GeoJSON) — inspect output in QGIS before
-      the PostGIS-vs-API decision is made; becomes the testable default sink.
-- [ ] `structura run` produces real polygons from a sample orthophoto.
-- [ ] Tests on a tiny synthetic GeoTIFF; CI green end-to-end.
+- [x] **New `FileSink`** (GeoPackage / GeoJSON) — inspect output in QGIS before
+      the PostGIS-vs-API decision is made; the testable default sink.
+- [x] `structura run` produces real polygons from a sample orthophoto.
+- [x] Tests on a tiny synthetic GeoTIFF; CI green end-to-end (geo extra installed).
 
 ### v0.3.0 — 2D track complete *(Sub-study A)*
 - [ ] `SamSegmenter` implemented (automatic / prompted mask generation).
