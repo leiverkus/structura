@@ -18,6 +18,8 @@ def _settings(input_dir: Path, output_path: Path) -> Settings:
     return Settings(
         input_dir=input_dir,
         sink="file",
+        segmentation_backend="classical",
+        gpu=False,
         output_path=output_path,
         pg_dsn=None,
         pg_schema="public",
