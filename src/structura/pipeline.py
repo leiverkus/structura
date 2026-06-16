@@ -10,12 +10,16 @@ from __future__ import annotations
 from .config import Settings
 from .db.api import DjangoApiSink
 from .db.base import VectorSink
+from .db.file import FileSink
 from .db.postgis import PostGISSink
 from .intake import RasterKind, discover_inputs
 from .models import Feature
+from .segmentation.classical import ClassicalSegmenter
 
 
 def make_sink(settings: Settings) -> VectorSink:
+    if settings.sink == "file":
+        return FileSink(settings.output_path)
     if settings.sink == "postgis":
         assert settings.pg_dsn is not None
         return PostGISSink(settings.pg_dsn, settings.pg_schema, settings.pg_table)
@@ -28,18 +32,18 @@ def make_sink(settings: Settings) -> VectorSink:
 def run(settings: Settings, *, write: bool = True) -> list[Feature]:
     """Run the vectorisation pipeline over all discovered inputs.
 
-    Currently wires intake + sink selection; the per-track segmenters/tracers
-    are stubs (see their NotImplementedError). Returns the produced features.
+    Orthophotos are segmented with the classical 2D backend; the DEM (2.5D) track
+    is still a stub (ROADMAP v0.4). Returns the produced features, and writes them
+    to the configured sink unless ``write`` is False.
     """
     products = discover_inputs(settings.input_dir)
     features: list[Feature] = []
 
     for product in products:
         if product.kind is RasterKind.ORTHO:
-            # TODO: features += SamSegmenter().segment(product.path)
-            pass
+            features += ClassicalSegmenter().segment(product.path)
         elif product.kind is RasterKind.DEM:
-            # TODO: features += WallTracer().trace(product.path)
+            # TODO: features += WallTracer().trace(product.path)  # ROADMAP v0.4
             pass
 
     if write and features:
