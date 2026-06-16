@@ -5,7 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from .. import geo
-from ..models import Feature, FeatureType, Track
+from ..models import Feature
+from ._common import label_mask_to_features
 
 
 class ClassicalSegmenter:
@@ -59,14 +60,11 @@ class ClassicalSegmenter:
         labeled = label(foreground)
 
         # Speckle is dropped by the world-unit area filter in mask_to_polygons.
-        geoms = geo.mask_to_polygons(labeled, transform, crs, min_area=self.min_area)
-        return [
-            Feature(
-                feature_type=FeatureType.STONE,
-                geometry=geom,
-                crs=crs,
-                track=Track.SEG_2D,
-                properties={"segmenter": self.name, "source_raster": str(ortho_path)},
-            )
-            for geom in geoms
-        ]
+        return label_mask_to_features(
+            labeled,
+            transform,
+            crs,
+            segmenter=self.name,
+            source_raster=ortho_path,
+            min_area=self.min_area,
+        )
