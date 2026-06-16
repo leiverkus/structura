@@ -1,7 +1,7 @@
-"""Trace wall courses from a DEM as polylines (2.5D track).
+"""Trace terrace/cut edges from a DEM as polylines (2.5D track).
 
-A wall protrudes slightly from its surroundings, so it stands out in a
-multiscale local-relief response far better than in the orthophoto.
+Edges (terrace edges, cuts, pit rims) are surface discontinuities — they show up
+as high slope rather than positive relief, so this traces a slope response.
 """
 
 from __future__ import annotations
@@ -14,24 +14,21 @@ from . import relief
 from ._common import relief_response_to_features
 
 
-class WallTracer:
-    """Detect wall courses from DEM relief and emit WALL polyline features.
+class EdgeTracer:
+    """Detect edges from DEM slope and emit EDGE polyline features.
 
-    Pipeline: multiscale local-relief response -> threshold (walls protrude) ->
-    gap-bridge (binary closing) -> skeletonise -> polylines. Gap bridging tolerates
-    partially destroyed / discontinuous walls.
+    Pipeline: slope response -> threshold (edges are steep) -> skeletonise ->
+    polylines. No gap bridging — edges are continuous discontinuities.
     """
 
-    name = "dem-wall-tracer"
+    name = "dem-edge-tracer"
 
     def __init__(
         self,
-        gap_bridge_m: float = 0.3,
         threshold_k: float = 1.0,
         min_length_m: float = 0.5,
         simplify_m: float | None = None,
     ) -> None:
-        self.gap_bridge_m = gap_bridge_m
         self.threshold_k = threshold_k
         self.min_length_m = min_length_m
         self.simplify_m = simplify_m
@@ -41,20 +38,20 @@ class WallTracer:
 
         array, transform, crs = geo.read_raster(dem_path)
         dem = np.asarray(array)[0]
-        res = abs(transform.a)  # pixel size in world units
+        res = abs(transform.a)
 
-        response = relief.multiscale_relief(dem)
+        response = relief.slope(dem, resolution=res)
         threshold = float(np.mean(response)) + self.threshold_k * float(np.std(response))
-        ridge = response > threshold
+        edges = response > threshold
 
         return relief_response_to_features(
-            ridge,
+            edges,
             transform,
             crs,
             tracer=self.name,
             source_raster=dem_path,
-            feature_type=FeatureType.WALL,
-            gap_bridge_px=round(self.gap_bridge_m / res),
+            feature_type=FeatureType.EDGE,
+            gap_bridge_px=0,
             min_length=self.min_length_m,
             simplify_tol=self.simplify_m,
         )
