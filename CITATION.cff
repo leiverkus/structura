@@ -19,7 +19,7 @@ authors:
     email: patrick.leiverkus@uni-oldenburg.de
     affiliation: "Carl von Ossietzky Universität Oldenburg"
     orcid: "https://orcid.org/0009-0006-2308-8297"
-version: "0.1.0"
+version: "0.2.0"
 date-released: "2026-06-16"
 license: MIT
 repository-code: "https://github.com/leiverkus/structura"
@@ -35,9 +35,11 @@ keywords:
   - excavation
   - digital humanities
   - reproducible research software
-# TODO: replace with the Zenodo concept DOI after the first release deposit.
-# doi: "10.5281/zenodo.XXXXXXX"
-# identifiers:
-#   - type: doi
-#     value: "10.5281/zenodo.XXXXXXX"
-#     description: "Concept DOI (resolves to all versions of Structura on Zenodo)"
+doi: "10.5281/zenodo.20716606"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20716606"
+    description: "Concept DOI (resolves to all versions of Structura on Zenodo)"
+  - type: doi
+    value: "10.5281/zenodo.20716607"
+    description: "Version DOI for Structura v0.2.0"

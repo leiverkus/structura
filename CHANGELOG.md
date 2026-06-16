@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Zenodo archival: DOI badge in the README and the concept DOI
+  (`10.5281/zenodo.20716606`) + v0.2.0 version DOI recorded in `CITATION.cff`.
+
 ## [0.2.0] - 2026-06-16
 
 The "walking skeleton": the pipeline now produces real georeferenced vector

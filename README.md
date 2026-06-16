@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg)](pyproject.toml)
 [![Status: walking skeleton](https://img.shields.io/badge/status-walking--skeleton-orange.svg)](#status)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20716606.svg)](https://doi.org/10.5281/zenodo.20716606)
 
 **AI-assisted vectorisation of photogrammetric excavation data.**
 
@@ -151,8 +152,10 @@ See [`CHANGELOG.md`](CHANGELOG.md). This project follows
 
 ## Citation
 
-If you use Structura, please cite it. Metadata for citation is provided in
-[`CITATION.cff`](CITATION.cff) (and [`.zenodo.json`](.zenodo.json) for archival).
+If you use Structura, please cite it. The archived versions are on Zenodo —
+cite the **concept DOI** [10.5281/zenodo.20716606](https://doi.org/10.5281/zenodo.20716606),
+which always resolves to the latest release. Citation metadata is in
+[`CITATION.cff`](CITATION.cff) (and [`.zenodo.json`](.zenodo.json) for archival);
 GitHub's "Cite this repository" reads the `CITATION.cff` directly.
 
 ## License
