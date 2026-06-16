@@ -20,12 +20,13 @@ intake  ──►  tracks  ──►  Feature[]  ──►  sink
 | `structura.intake` | Discover WebODM rasters, tag each as `ORTHO` or `DEM`. |
 | `structura.models` | `Feature` (the shared vector object), `Track`, `FeatureType`. |
 | `structura.geo` | Raster I/O and raster→vector conversion (georeferencing core). |
-| `structura.segmentation` | 2D track — stones & surfaces (SAM / Cellpose / classical). |
+| `structura.segmentation` | 2D track — stones & surfaces (classical / SAM / Cellpose) behind a `Segmenter` protocol; `_common` shares the mask→Feature step. |
+| `structura.metrics` | Geometry metrics for Sub-study A (IoU, matching, over-/under-seg, a/b-axis). |
 | `structura.dem` | 2.5D track — relief derivatives + wall / edge tracing. |
 | `structura.profile` | Profile track — section stratum segmentation. |
 | `structura.temporal` | Temporal track — overlay / intersect of daily layers. |
 | `structura.db` | Output sinks — file (GeoPackage/GeoJSON), PostGIS, or Django API. |
-| `structura.pipeline` | Orchestration: intake → tracks → sink. |
+| `structura.pipeline` | Orchestration: intake → tracks → sink; `make_segmenter` / `make_sink` factories. |
 
 ## The data model
 
@@ -52,14 +53,27 @@ are what make every derived vector world-referenced: pixel `(col, row)` → worl
 Segments the orthophoto into polygon features. Three interchangeable backends
 implement the `Segmenter` protocol (`segment(ortho_path) -> list[Feature]`):
 
-- `ClassicalSegmenter` — watershed baseline (**implemented**; cheap,
-  deterministic, GPU-free). Otsu thresholding drives the markers, watershed runs
-  on the Sobel gradient, connected foreground components become labels, and
-  `geo.mask_to_polygons` vectorises them. The default backend.
-- `SamSegmenter` — Segment Anything (stub, ROADMAP v0.3).
-- `CellposeSegmenter` — Cellpose instance masks (stub, ROADMAP v0.3).
+- `ClassicalSegmenter` — watershed baseline (cheap, deterministic, GPU-free).
+  Otsu thresholding drives the markers, watershed runs on the Sobel gradient,
+  connected foreground components become labels. The default backend.
+- `SamSegmenter` — SAM automatic mask generation via **samgeo**
+  (`segment-geospatial`): runs on the (tiled) georeferenced ortho and writes a
+  label raster, which is read back through the shared path.
+- `CellposeSegmenter` — **Cellpose-SAM (v4)** instance masks
+  (`CellposeModel.eval`).
 
-Masks become georeferenced polygons via `geo.mask_to_polygons`.
+All three end the same way: an integer instance-label mask →
+`segmentation._common.label_mask_to_features` → `geo.mask_to_polygons` →
+`Feature`s. The active backend is chosen by `make_segmenter(settings)` from
+`STRUCTURA_2D_BACKEND`. The learned backends import their heavy deps lazily, so
+they need the matching extra (`.[sam]` / `.[cellpose]`) only when actually run.
+
+## Metrics (`structura.metrics`)
+Pure-Shapely geometry metrics for Sub-study A: `iou`, `match_instances`,
+`precision_recall_f1`, `segmentation_rates` (coverage-based over-/under-seg), and
+`axis_error` (a/b axes from the minimum rotated rectangle). They take lists of
+geometries (`geoms_of(features)` adapts `Feature`s). AP@IoU and effort accounting
+are deferred to the v0.9 evaluation harness.
 
 ### 2.5D — walls & edges (`structura.dem`)
 A wall protrudes slightly from its surroundings, so it shows up in local relief

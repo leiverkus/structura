@@ -12,6 +12,8 @@ cp .env.example .env
 | Variable | Meaning | Default |
 |----------|---------|---------|
 | `STRUCTURA_INPUT_DIR` | Directory WebODM raster products land in | `./data/incoming` |
+| `STRUCTURA_2D_BACKEND` | 2D segmenter: `classical`, `sam`, or `cellpose` (latter two need their extra) | `classical` |
+| `STRUCTURA_GPU` | Use GPU for the `sam`/`cellpose` backends | `false` |
 | `STRUCTURA_SINK` | Output sink: `file`, `postgis`, or `api` | `file` |
 | `STRUCTURA_OUTPUT_PATH` | File-sink output (format from extension: `.gpkg` / `.geojson`) | `./data/output/features.gpkg` |
 | `PGHOST` / `PGPORT` / `PGDATABASE` / `PGUSER` / `PGPASSWORD` | PostGIS connection | `localhost` / `5432` / `excavation` / `structura` / — |
