@@ -1,11 +1,21 @@
-# Structura — Workflow App
+# Structura
 
-Workflow application for the **vectorisation step** of the Structura excavation
-pipeline: it ingests photogrammetric raster products and produces **georeferenced
-vector geometry** for an excavation database.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg)](pyproject.toml)
+[![Status: scaffolding](https://img.shields.io/badge/status-scaffolding-orange.svg)](#status)
 
-> Research context, goals and the full idea: see
-> [`../paper/input/description/project-description.md`](../paper/input/description/project-description.md).
+**AI-assisted vectorisation of photogrammetric excavation data.**
+
+Structura is the workflow application for the **vectorisation step** of an
+archaeological excavation pipeline. It ingests georeferenced photogrammetric
+raster products (orthophoto, DEM) from an upstream WebODM / OpenDroneMap survey
+and produces **georeferenced vector geometry** — stone outlines, surfaces, wall
+courses, edges, section vectors — for a PostGIS excavation database.
+
+> **Research context.** Structura is the software side of a research project on
+> automated excavation plans. The methodology, evaluation plan, and literature
+> live in a companion research repository (`paper/`). This repository is the
+> code only.
 
 ## Pipeline overview
 
@@ -40,7 +50,6 @@ vector geometry** for an excavation database.
               │ PostgreSQL / PostGIS             │
               │ (Django app; Flutter mobile      │
               │  client via API)                 │
-              │ — direct write OR via API: TBD   │
               └─────────────────────────────────┘
                                │
                                ▼
@@ -48,34 +57,97 @@ vector geometry** for an excavation database.
               → per-stratum / combined excavation plans
 ```
 
+See [`docs/architecture.md`](docs/architecture.md) for the detailed design.
+
 ## Tracks
 
-| Track | Input | Method (to evaluate) | Output geometry |
-|-------|-------|----------------------|-----------------|
+| Track | Input | Method (under evaluation) | Output geometry |
+|-------|-------|---------------------------|-----------------|
 | **2D** stones & surfaces | orthophoto | SAM, Cellpose, classical CV | closed polygons |
-| **2.5D** walls & edges | DEM | relief/ridge detection, learned models | polylines |
-| **Profile** strata | section image | colour/texture segmentation | section vectors |
+| **2.5D** walls & edges | DEM | relief / ridge detection, learned models | polylines |
+| **Profile** strata | section image | colour / texture segmentation | section vectors |
 | **Temporal** progress | daily vector layers | PostGIS overlay / intersect | reconciled layers |
 
-## Key constraints
+## Install
 
-- **Everything is georeferenced** — vectors carry the raster CRS.
-- **Stratified, complex scenes** — many superimposed layers, not a singular wall;
-  walls may be **partially destroyed / discontinuous**.
-- **Daily captures** — results across days are overlaid/intersected.
-- **Stratum attribution is downstream & interactive** — the archaeologist marks a
-  feature's area as a polygon in the DB webview; this app produces the vectors.
+Requires Python ≥ 3.11.
 
-## Open decisions
+```bash
+git clone https://github.com/leiverkus/structura.git
+cd structura
+python -m venv .venv && source .venv/bin/activate
+pip install -e .            # core (light)
+```
 
-- **DB integration:** write vectors **directly to PostGIS** vs. **via the Django
-  API**. (Undecided.)
-- **2D model choice:** SAM vs. Cellpose vs. classical CV — to be decided by the
-  comparative evaluation in the paper.
-- **App tech stack:** Python is the natural fit (SAM/Cellpose, GDAL/rasterio,
-  Shapely, psycopg/SQLAlchemy + PostGIS). Orchestration/UI layer TBD.
+The heavy model and geospatial stacks are **optional extras**, installed only
+when you need them:
+
+```bash
+pip install -e ".[geo]"      # rasterio, shapely, geopandas, scikit-image
+pip install -e ".[sam]"      # segment-anything, torch, opencv
+pip install -e ".[cellpose]" # cellpose
+pip install -e ".[db]"       # psycopg, SQLAlchemy, GeoAlchemy2 (PostGIS sink)
+pip install -e ".[api]"      # httpx (Django-API sink)
+pip install -e ".[dev]"      # pytest, ruff, mypy
+```
+
+## Usage
+
+Copy the environment template and fill it in:
+
+```bash
+cp .env.example .env         # set input dir, sink (postgis|api), DB / API creds
+```
+
+The package exposes a `structura` CLI:
+
+```bash
+structura --version
+structura intake             # discover & list WebODM raster products
+structura run --dry-run      # run the pipeline without writing to the sink
+structura run                # run and persist features to the configured sink
+```
+
+Configuration is read from the environment / `.env` (see
+[`.env.example`](.env.example) and [`docs/data-layout.md`](docs/data-layout.md)).
 
 ## Status
 
-Scaffolding stage. See the research project under [`../paper/`](../paper/) for the
-methodology, evaluation plan, and literature.
+**Scaffolding stage.** The package, CLI, configuration, data model, and the
+track / sink interfaces are in place; the per-track segmenters, tracers, and
+sinks are stubs (they raise `NotImplementedError`). The comparative model
+evaluation that decides the default backends is **blocked on excavation data**
+that does not exist yet — see the research repository for the evaluation plan.
+
+Open architectural decisions are tracked in
+[`docs/architecture.md`](docs/architecture.md#open-decisions).
+
+## Documentation
+
+- [`docs/architecture.md`](docs/architecture.md) — design, tracks, data model, sinks
+- [`docs/development.md`](docs/development.md) — dev setup, testing, adding a backend
+- [`docs/data-layout.md`](docs/data-layout.md) — expected inputs, CRS handling, output
+
+## Contributing
+
+This is a research project under active design. Issues and pull requests are
+welcome. Please run the dev tooling before submitting:
+
+```bash
+ruff check . && mypy src && pytest
+```
+
+## Changelog
+
+See [`CHANGELOG.md`](CHANGELOG.md). This project follows
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Citation
+
+If you use Structura, please cite it. Metadata for citation is provided in
+[`CITATION.cff`](CITATION.cff) (and [`.zenodo.json`](.zenodo.json) for archival).
+GitHub's "Cite this repository" reads the `CITATION.cff` directly.
+
+## License
+
+[MIT](LICENSE) © 2026 Patrick Leiverkus

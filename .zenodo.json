@@ -1,0 +1,33 @@
+{
+  "title": "Structura: AI-assisted vectorisation of photogrammetric excavation data",
+  "description": "Structura is a workflow application for the vectorisation step of an archaeological excavation pipeline. It ingests georeferenced photogrammetric raster products (orthophoto, DEM) from an upstream WebODM/OpenDroneMap survey and produces georeferenced vector geometry for a PostGIS excavation database. It covers multiple tracks: 2D segmentation of stones and surfaces from the orthophoto (SAM, Cellpose, classical CV), 2.5D wall and edge tracing from the DEM, profile/section strata segmentation, and temporal integration of daily captures via PostGIS overlay/intersect, for stratified, complex excavation scenes.",
+  "upload_type": "software",
+  "license": "MIT",
+  "version": "0.1.0",
+  "creators": [
+    {
+      "name": "Leiverkus, Patrick",
+      "affiliation": "Carl von Ossietzky Universität Oldenburg",
+      "orcid": "0009-0006-2308-8297"
+    }
+  ],
+  "keywords": [
+    "photogrammetry",
+    "vectorisation",
+    "segmentation",
+    "georeferencing",
+    "GIS",
+    "PostGIS",
+    "archaeology",
+    "excavation",
+    "digital humanities",
+    "reproducible research software"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/leiverkus/structura",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
