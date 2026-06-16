@@ -68,8 +68,12 @@ top level, so `import structura` works with only the core dependency installed.
 5. Add a test — CI-testable post-processing via a fake mask through
    `label_mask_to_features`; guard real-model tests with `pytest.importorskip`.
 
-The same shape applies to a new **sink** (implement `VectorSink.write`) or a new
-**DEM tracer**.
+For a new **DEM tracer** (2.5D track) the parallel is `dem/_common.py`: produce a
+binary relief response, then call
+`relief_response_to_features(mask, transform, crs, ..., feature_type=...)`, which
+gap-bridges, calls `geo.skeleton_to_polylines`, and wraps the lines as
+`Track.DEM_25D` features. Wire it into `pipeline.run`'s DEM branch. A new **sink**
+just implements `VectorSink.write`.
 
 ## Conventions
 

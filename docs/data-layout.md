@@ -14,6 +14,7 @@ cp .env.example .env
 | `STRUCTURA_INPUT_DIR` | Directory WebODM raster products land in | `./data/incoming` |
 | `STRUCTURA_2D_BACKEND` | 2D segmenter: `classical`, `sam`, or `cellpose` (latter two need their extra) | `classical` |
 | `STRUCTURA_GPU` | Use GPU for the `sam`/`cellpose` backends | `false` |
+| `STRUCTURA_GAP_BRIDGE_M` | 2.5D wall-tracing gap-bridging tolerance (world units) | `0.3` |
 | `STRUCTURA_SINK` | Output sink: `file`, `postgis`, or `api` | `file` |
 | `STRUCTURA_OUTPUT_PATH` | File-sink output (format from extension: `.gpkg` / `.geojson`) | `./data/output/features.gpkg` |
 | `PGHOST` / `PGPORT` / `PGDATABASE` / `PGUSER` / `PGPASSWORD` | PostGIS connection | `localhost` / `5432` / `excavation` / `structura` / — |
@@ -60,7 +61,8 @@ one CRS, or reproject upstream before intake.
 ## Output
 
 The pipeline produces a list of georeferenced `Feature`s and hands them to the
-configured sink:
+configured sink. Orthophotos yield `stone`/`surface` **polygons** (2D track);
+DEMs yield `wall`/`edge` **polylines** (2.5D track). The sinks:
 
 - **File** (`STRUCTURA_SINK=file`, the default) — features are written to
   `STRUCTURA_OUTPUT_PATH`. The format follows the extension: `.gpkg` →

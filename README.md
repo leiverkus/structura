@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg)](pyproject.toml)
-[![Status: 2D track](https://img.shields.io/badge/status-2D--track-orange.svg)](#status)
+[![Status: 2.5D track](https://img.shields.io/badge/status-2.5D--track-orange.svg)](#status)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20716606.svg)](https://doi.org/10.5281/zenodo.20716606)
 
 **AI-assisted vectorisation of photogrammetric excavation data.**
@@ -129,12 +129,15 @@ Configuration is read from the environment / `.env` (see
 
 ## Status
 
-**2D track complete (v0.3).** The pipeline runs end-to-end (orthophoto intake →
-2D segmentation → georeferenced polygons → GeoPackage/GeoJSON), with three
-selectable 2D backends — **classical** (default, GPU-free), **SAM** (via samgeo)
-and **Cellpose-SAM** — plus geometry-metric utilities (`structura.metrics`:
-IoU/matching, over-/under-segmentation, a/b-axis error). The 2.5D / profile /
-temporal tracks and the PostGIS / Django-API sinks are still stubs. The learned
+**2.5D track (v0.4).** Two tracks run end-to-end now:
+- **2D** (orthophoto → polygons) with three selectable backends — **classical**
+  (default, GPU-free), **SAM** (via samgeo), **Cellpose-SAM**.
+- **2.5D** (DEM → polylines): self-implemented relief derivatives feed a
+  **`WallTracer`** (multiscale local-relief ridges → WALL, with gap bridging for
+  discontinuous walls) and an **`EdgeTracer`** (slope discontinuities → EDGE).
+
+Plus geometry-metric utilities (`structura.metrics`). The profile / temporal
+tracks and the PostGIS / Django-API sinks are still stubs. The learned 2D
 backends are integrated but their comparative evaluation is **blocked on
 excavation data** that does not exist yet — see the research repository.
 

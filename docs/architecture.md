@@ -75,12 +75,22 @@ Pure-Shapely geometry metrics for Sub-study A: `iou`, `match_instances`,
 geometries (`geoms_of(features)` adapts `Feature`s). AP@IoU and effort accounting
 are deferred to the v0.9 evaluation harness.
 
-### 2.5D — walls & edges (`structura.dem`)
+### 2.5D — walls & edges (`structura.dem`) — implemented
 A wall protrudes slightly from its surroundings, so it shows up in local relief
-far better than in the orthophoto. `dem.relief` computes derivatives (hillshade,
-slope, curvature, local relief model); `WallTracer` turns the ridge/edge
-response into polylines via `geo.skeleton_to_polylines`. Must **bridge gaps**
-from partially destroyed walls and keep edges as separate polylines.
+far better than in the orthophoto. `dem.relief` provides the derivatives
+(`hillshade`, `slope`, `curvature`, `local_relief_model`, `multiscale_relief` —
+an RVT-style blend), self-implemented in numpy/scikit-image.
+
+- **`WallTracer`** — multiscale local-relief ridge response → threshold (walls
+  protrude) → **gap bridging** (dilation, for partially destroyed walls) →
+  `WALL` polylines.
+- **`EdgeTracer`** — slope response (terrace/cut discontinuities) → `EDGE`
+  polylines (no gap bridging — edges are continuous).
+
+Both thresholds use a deterministic `mean + k·std` rule and funnel through
+`dem._common.relief_response_to_features` → `geo.skeleton_to_polylines`
+(skeletonise → junction-clustered trace → spur prune → simplify) →
+`Feature`s (`Track.DEM_25D`). The pipeline runs both tracers on each DEM.
 
 ### Profile — section strata (`structura.profile`)
 Sections are driven by fine **colour / texture** differences between strata
