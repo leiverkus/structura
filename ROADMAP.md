@@ -42,12 +42,12 @@ no GPU, no model download, no database required.
 - Data-dependent: model fine-tuning and the SAM-vs-Cellpose verdict belong to
   the evaluation milestone (v0.9), not here.
 
-### v0.4.0 — 2.5D track *(Sub-study B)*
-- [ ] `dem.relief` derivatives (hillshade, slope, curvature, local relief model;
-      RVT-style multiscale blend).
-- [ ] `geo.skeleton_to_polylines` implemented.
-- [ ] `WallTracer` (relief → ridge/edge response → skeleton → polyline) with
-      **gap bridging** for partially destroyed walls; edges kept separate.
+### v0.4.0 — 2.5D track ✅ *(released 2026-06-16)*  *(Sub-study B)*
+- [x] `dem.relief` derivatives (hillshade, slope, curvature, local relief model,
+      RVT-style multiscale blend) — self-implemented (numpy/scikit-image).
+- [x] `geo.skeleton_to_polylines` implemented (junction-clustered trace + spur prune).
+- [x] `WallTracer` (multiscale relief ridges → polyline) with **gap bridging**;
+      `EdgeTracer` (slope discontinuities → EDGE), edges kept as separate polylines.
 
 ### v0.5.0 — Persistence *(resolve the DB decision)*
 - [ ] `PostGISSink` (psycopg; geometry column with feature CRS SRID; attributes

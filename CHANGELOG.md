@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-16
+
+Adds the 2.5D track (Sub-study B): DEMs are traced into wall and edge polylines.
+
+### Added
+- `dem.relief` derivatives (self-implemented, numpy/scikit-image): `hillshade`,
+  `slope`, `curvature`, `local_relief_model`, and `multiscale_relief` (RVT-style
+  multiscale blend).
+- `geo.skeleton_to_polylines` — skeletonise → junction-clustered trace → spur
+  prune → simplify → georeferenced Shapely LineStrings.
+- `WallTracer` — multiscale local-relief ridges → `WALL` polylines, with
+  dilation-based **gap bridging** for partially destroyed walls.
+- `EdgeTracer` — slope discontinuities → `EDGE` polylines.
+- `dem._common.relief_response_to_features` — shared response→polyline-features
+  wrapper (parallel to `segmentation._common`).
+- `STRUCTURA_GAP_BRIDGE_M` setting; the pipeline DEM branch now runs both tracers.
+- Tests: `test_relief`, `test_skeleton`, `test_wall_tracing` (incl. gap bridging),
+  `test_edge_tracing`; end-to-end test extended to DEM→polyline output.
+
+### Changed
+- `pipeline.run` DEM branch implemented (was a stub); version → `0.4.0`.
+
 ## [0.3.0] - 2026-06-16
 
 Completes the 2D track (Sub-study A): two learned segmentation backends, a
@@ -85,7 +107,8 @@ output end-to-end with no GPU, model download, or database.
   - Optional dependency extras: `geo`, `sam`, `cellpose`, `db`, `api`, `dev`.
   - Smoke test (`tests/test_smoke.py`).
 
-[Unreleased]: https://github.com/leiverkus/structura/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/leiverkus/structura/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/leiverkus/structura/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/leiverkus/structura/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/leiverkus/structura/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/leiverkus/structura/releases/tag/v0.1.0

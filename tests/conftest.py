@@ -43,3 +43,47 @@ def synthetic_ortho(tmp_path: Path) -> Path:
     ) as dst:
         dst.write(array)
     return path
+
+
+def _write_dem(path: Path, dem) -> Path:
+    """Write a single-band float32 DEM GeoTIFF at 5 cm pixels in TEST_CRS."""
+    import rasterio
+    from rasterio.transform import from_origin
+
+    height, width = dem.shape
+    transform = from_origin(500000, 4500000, 0.05, 0.05)  # 5 cm pixels
+    with rasterio.open(
+        path,
+        "w",
+        driver="GTiff",
+        height=height,
+        width=width,
+        count=1,
+        dtype="float32",
+        crs=TEST_CRS,
+        transform=transform,
+    ) as dst:
+        dst.write(dem[None, :, :])
+    return path
+
+
+@pytest.fixture
+def synthetic_dem(tmp_path: Path) -> Path:
+    """A flat DEM with one raised horizontal ridge (a wall). Filename tags it DEM."""
+    pytest.importorskip("rasterio")
+    import numpy as np
+
+    dem = np.full((100, 100), 100.0, dtype="float32")
+    dem[48:52, :] = 100.20  # a 20 cm ridge across the whole width
+    return _write_dem(tmp_path / "odm_dem.tif", dem)
+
+
+@pytest.fixture
+def synthetic_dem_step(tmp_path: Path) -> Path:
+    """A flat DEM with a raised terrace half (a slope edge). Filename tags it DEM."""
+    pytest.importorskip("rasterio")
+    import numpy as np
+
+    dem = np.full((100, 100), 100.0, dtype="float32")
+    dem[:, 50:] = 100.50  # a 50 cm step → high slope along the boundary
+    return _write_dem(tmp_path / "dem_step.tif", dem)

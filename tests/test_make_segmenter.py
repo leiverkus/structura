@@ -17,6 +17,7 @@ def _settings(backend: str) -> Settings:
         sink="file",
         segmentation_backend=backend,
         gpu=False,
+        gap_bridge_m=0.3,
         output_path=Path("out.gpkg"),
         pg_dsn=None,
         pg_schema="public",
