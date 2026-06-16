@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `development.md` (dev setup, testing, adding a backend), and
   `data-layout.md` (expected inputs, CRS handling, output).
 - GitHub-ready `README.md` (badges, install/usage, status, citation, license).
+- GitHub Actions CI (`.github/workflows/ci.yml`): ruff + mypy + pytest on
+  Python 3.11 and 3.12.
 
 ### Changed
 - `pyproject.toml`: `license` set to `MIT` (was `TBD`); author normalised to
