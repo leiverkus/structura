@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "structura-workflow"
-version = "0.1.0"
+version = "0.2.0"
 description = "AI-assisted vectorisation of photogrammetric excavation data into georeferenced vectors for a PostGIS excavation database."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -23,6 +23,7 @@ geo = [
     "shapely>=2.0",
     "geopandas>=0.14",
     "scikit-image>=0.22",
+    "pyogrio>=0.7",
 ]
 # 2D segmentation backends
 sam = ["segment-anything", "torch", "opencv-python"]
@@ -45,4 +46,19 @@ target-version = "py311"
 
 [tool.mypy]
 python_version = "3.11"
+ignore_missing_imports = true
+
+# Don't follow into the geospatial / imaging stacks — they are untyped for our
+# purposes and some (e.g. tifffile) use newer syntax that mypy's 3.11 target
+# can't parse. Treat them as Any.
+[[tool.mypy.overrides]]
+module = [
+    "rasterio.*",
+    "shapely.*",
+    "geopandas.*",
+    "skimage.*",
+    "pyogrio.*",
+    "tifffile.*",
+]
+follow_imports = "skip"
 ignore_missing_imports = true

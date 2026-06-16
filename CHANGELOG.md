@@ -7,25 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-16
+
+The "walking skeleton": the pipeline now produces real georeferenced vector
+output end-to-end with no GPU, model download, or database.
+
 ### Added
-- `LICENSE` (MIT).
-- `CITATION.cff` (Citation File Format 1.2.0) for machine-readable software
-  citation — enables GitHub's "Cite this repository" and a Zenodo archival
-  record. DOI is left as a placeholder until the first Zenodo deposit.
-- `.zenodo.json` archival metadata (software upload, MIT, ORCID, keywords).
-- `CHANGELOG.md` (this file).
-- `docs/` folder: `architecture.md` (design, tracks, data model, sinks),
-  `development.md` (dev setup, testing, adding a backend), and
-  `data-layout.md` (expected inputs, CRS handling, output).
-- GitHub-ready `README.md` (badges, install/usage, status, citation, license).
-- GitHub Actions CI (`.github/workflows/ci.yml`): ruff + mypy + pytest on
-  Python 3.11 and 3.12.
-- `ROADMAP.md`: versioned engineering milestones (v0.2–v1.0), cross-referenced
-  to the research sub-studies, with the data-dependent work isolated to the end.
+- `geo.mask_to_polygons` — vectorise a label mask into georeferenced Shapely
+  polygons (rasterio `features.shapes`, world-unit `min_area` filter).
+- `ClassicalSegmenter` implementation — deterministic watershed 2D backend
+  (Otsu markers → Sobel-gradient watershed → connected components → polygons).
+- `FileSink` (`structura.db.file`) — write features to GeoPackage / GeoJSON
+  (format from extension); single-CRS assertion; `properties` as a JSON string.
+- `STRUCTURA_OUTPUT_PATH` setting for the file sink.
+- Geo-path tests on a synthetic GeoTIFF (`tests/conftest.py` fixture +
+  `test_geo`, `test_classical`, `test_file_sink`, `test_pipeline`), guarded with
+  `pytest.importorskip` so they skip without the `geo` extra.
+- `pyogrio` added to the `geo` extra (guarantees a geopandas I/O engine).
+- Project-citation / GitHub-readiness scaffolding folded into this release:
+  `LICENSE` (MIT), `CITATION.cff`, `.zenodo.json`, `CHANGELOG.md`, the `docs/`
+  folder, a GitHub-ready `README.md`, GitHub Actions CI, and `ROADMAP.md`.
 
 ### Changed
+- **Default `STRUCTURA_SINK` is now `file`** (was `postgis`) — `structura run`
+  works out of the box, writing `./data/output/features.gpkg`.
+- `pipeline.run` ORTHO branch now runs the classical segmenter (was a stub).
+- CI installs the `geo` extra (`pip install -e ".[dev,geo]"`) so the geo path is
+  exercised; mypy skips following into the geospatial/imaging stacks.
 - `pyproject.toml`: `license` set to `MIT` (was `TBD`); author normalised to
-  `Patrick Leiverkus` with the institutional e-mail.
+  `Patrick Leiverkus`; version → `0.2.0`.
 
 ## [0.1.0] - 2026-06-16
 
@@ -48,5 +58,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Optional dependency extras: `geo`, `sam`, `cellpose`, `db`, `api`, `dev`.
   - Smoke test (`tests/test_smoke.py`).
 
-[Unreleased]: https://github.com/leiverkus/structura/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/leiverkus/structura/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/leiverkus/structura/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/leiverkus/structura/releases/tag/v0.1.0

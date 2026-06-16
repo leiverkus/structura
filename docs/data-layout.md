@@ -12,7 +12,8 @@ cp .env.example .env
 | Variable | Meaning | Default |
 |----------|---------|---------|
 | `STRUCTURA_INPUT_DIR` | Directory WebODM raster products land in | `./data/incoming` |
-| `STRUCTURA_SINK` | Output sink: `postgis` or `api` | `postgis` |
+| `STRUCTURA_SINK` | Output sink: `file`, `postgis`, or `api` | `file` |
+| `STRUCTURA_OUTPUT_PATH` | File-sink output (format from extension: `.gpkg` / `.geojson`) | `./data/output/features.gpkg` |
 | `PGHOST` / `PGPORT` / `PGDATABASE` / `PGUSER` / `PGPASSWORD` | PostGIS connection | `localhost` / `5432` / `excavation` / `structura` / — |
 | `STRUCTURA_PG_SCHEMA` / `STRUCTURA_PG_TABLE` | Target schema / table | `public` / `features` |
 | `STRUCTURA_API_BASE_URL` | Django API base URL (when `sink=api`) | — |
@@ -59,6 +60,12 @@ one CRS, or reproject upstream before intake.
 The pipeline produces a list of georeferenced `Feature`s and hands them to the
 configured sink:
 
+- **File** (`STRUCTURA_SINK=file`, the default) — features are written to
+  `STRUCTURA_OUTPUT_PATH`. The format follows the extension: `.gpkg` →
+  GeoPackage (single file, QGIS-native), `.geojson` / `.json` → GeoJSON.
+  Attributes are `feature_type`, `track`, `captured_on` (ISO date), `stratum`,
+  and `properties` (serialised as a JSON string). All features must share one
+  CRS — the sink never reprojects.
 - **PostGIS** (`STRUCTURA_SINK=postgis`) — features are inserted into
   `STRUCTURA_PG_SCHEMA.STRUCTURA_PG_TABLE` with a geometry column (feature CRS
   SRID) plus attributes (`feature_type`, `track`, `captured_on`, `stratum`, and

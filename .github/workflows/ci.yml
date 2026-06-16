@@ -17,8 +17,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install (core + dev)
-        run: pip install -e ".[dev]"
+      - name: Install (core + dev + geo)
+        run: pip install -e ".[dev,geo]"
 
       - name: Lint (ruff)
         run: ruff check .

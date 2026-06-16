@@ -23,5 +23,10 @@ data/
 *.las
 *.ply
 
+# Generated vector output
+data/output/
+*.gpkg
+*.geojson
+
 # OS
 .DS_Store
