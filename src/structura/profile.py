@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Profile (section) track: vectorise stratum boundaries from a section image.
 
 Unlike the plan view, sections are driven by fine colour/texture differences

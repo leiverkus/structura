@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **License changed from MIT to GNU AGPL v3 or later** (`AGPL-3.0-or-later`).
+  Updated `LICENSE`, `pyproject.toml`, `CITATION.cff`, `.zenodo.json`, and the
+  README badge/footer, added source-file SPDX identifiers, and documented
+  third-party dependency license notes.
+
 ## [0.4.0] - 2026-06-16
 
 Adds the 2.5D track (Sub-study B): DEMs are traced into wall and edge polylines.

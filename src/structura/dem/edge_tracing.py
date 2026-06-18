@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Trace terrace/cut edges from a DEM as polylines (2.5D track).
 
 Edges (terrace edges, cuts, pit rims) are surface discontinuities — they show up

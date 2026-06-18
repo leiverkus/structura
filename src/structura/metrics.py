@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Geometry metrics for the 2D track (Sub-study A).
 
 Pure-Shapely utilities to compare predicted polygons against ground-truth

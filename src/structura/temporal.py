@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Temporal integration of per-day vector layers.
 
 Daily captures document excavation progress; vectors from different days must be

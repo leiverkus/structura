@@ -19,7 +19,7 @@ research plan, so the two repositories stay aligned.
 
 ### v0.1.0 — Scaffolding ✅ *(released 2026-06-16)*
 Package, CLI, configuration, data model, track/sink interfaces (stubs),
-packaging, docs, MIT license, citation metadata, CI.
+packaging, docs, license metadata, citation metadata, CI.
 
 ### v0.2.0 — Walking skeleton ✅ *(released 2026-06-16)*
 The first milestone where the pipeline actually produces georeferenced output —

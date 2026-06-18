@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Shared post-processing for 2D segmentation backends.
 
 Every backend ends the same way: an integer instance-label mask is vectorised

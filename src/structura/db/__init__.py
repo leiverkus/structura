@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Output sinks: write georeferenced features to disk or the excavation database.
 
 Strategies (the DB choice is still open — see ROADMAP v0.5):

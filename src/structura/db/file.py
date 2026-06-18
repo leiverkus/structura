@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """File sink: write features to a GeoPackage or GeoJSON (requires the ``geo`` extra).
 
 The testable default sink — lets the pipeline run end-to-end and the output be

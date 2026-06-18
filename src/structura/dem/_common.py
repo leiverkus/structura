@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Shared post-processing for 2.5D DEM tracers.
 
 Both tracers end the same way: a binary relief-response mask is (optionally)

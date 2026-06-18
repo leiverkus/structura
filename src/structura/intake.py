@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Intake of WebODM raster products (orthophoto + DEM).
 
 Discovers georeferenced rasters delivered into the input directory and tags

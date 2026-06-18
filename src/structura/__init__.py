@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Structura — vectorisation workflow for photogrammetric excavation data.
 
 Turns WebODM orthophotos and DEMs into georeferenced vector features

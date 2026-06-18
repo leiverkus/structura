@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Relief derivatives from a DEM — the signal a wall course stands out in.
 
 A wall protrudes slightly from its surroundings, so it shows up in local relief

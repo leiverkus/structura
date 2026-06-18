@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Core data model shared across all tracks.
 
 A ``Feature`` is one georeferenced vector object produced by a track. Geometry

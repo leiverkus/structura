@@ -8,7 +8,7 @@ version = "0.4.0"
 description = "AI-assisted vectorisation of photogrammetric excavation data into georeferenced vectors for a PostGIS excavation database."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "Patrick Leiverkus", email = "patrick.leiverkus@uni-oldenburg.de" }]
 
 # Core deps kept light; heavy/optional model + geo stacks live in extras below.

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Georeferencing helpers: raster I/O and raster->vector conversion.
 
 Requires the ``geo`` extra (rasterio, shapely, scikit-image). Imports are local

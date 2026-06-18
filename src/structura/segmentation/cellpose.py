@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Cellpose backend for the 2D track. Candidate for dense, roundish stones.
 
 Targets Cellpose v4 (Cellpose-SAM): ``CellposeModel`` loads the ``cpsam`` model

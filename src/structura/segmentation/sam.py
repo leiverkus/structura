@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Segment Anything (SAM) backend for the 2D track, via samgeo.
 
 Uses ``segment-geospatial`` (samgeo): it runs SAM's automatic mask generation on

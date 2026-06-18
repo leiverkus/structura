@@ -1,6 +1,6 @@
 # Structura
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: AGPL-3.0-or-later](https://img.shields.io/badge/License-AGPL--3.0--or--later-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg)](pyproject.toml)
 [![Status: 2.5D track](https://img.shields.io/badge/status-2.5D--track-orange.svg)](#status)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20716606.svg)](https://doi.org/10.5281/zenodo.20716606)
@@ -175,4 +175,6 @@ GitHub's "Cite this repository" reads the `CITATION.cff` directly.
 
 ## License
 
-[MIT](LICENSE) © 2026 Patrick Leiverkus
+Structura is licensed under [AGPL-3.0-or-later](LICENSE) © 2026 Patrick Leiverkus.
+Third-party dependency notes are tracked in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Trace wall courses from a DEM as polylines (2.5D track).
 
 A wall protrudes slightly from its surroundings, so it stands out in a

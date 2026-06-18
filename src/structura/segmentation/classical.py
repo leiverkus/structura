@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Classical CV baseline for the 2D track (watershed / contour-based)."""
 
 from __future__ import annotations
