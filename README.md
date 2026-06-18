@@ -5,7 +5,7 @@
 [![Status: 2.5D track](https://img.shields.io/badge/status-2.5D--track-orange.svg)](#status)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20716606.svg)](https://doi.org/10.5281/zenodo.20716606)
 
-**AI-assisted vectorisation of photogrammetric excavation data.**
+**Archaeological feature extraction and vectorisation pipeline.**
 
 Structura is the workflow application for the **vectorisation step** of an
 archaeological excavation pipeline. It ingests georeferenced photogrammetric
